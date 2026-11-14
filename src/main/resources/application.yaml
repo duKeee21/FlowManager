@@ -32,6 +32,9 @@ spring:
         spring.json.use.type.headers: false
         spring.json.value.default.type: com.ykul.flowManager.dto.ConversionResult
         spring.json.trusted.packages: "*"
+      enable-auto-commit: false
+    listener:
+      ack-mode: manual_immediate
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -49,3 +52,11 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+
+app:
+  kafka:
+    topics:
+      requests: file-conversion-requests
+      results: file-conversion-results
+    groups:
+      flow-manager: flow-manager-group
