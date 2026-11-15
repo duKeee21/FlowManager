@@ -1,0 +1,17 @@
+eureka:
+  client:
+    enabled: false
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+app:
+  kafka:
+    topics:
+      requests: file-conversion-requests
+      results: file-conversion-results
+    groups:
+      flow-manager: flow-manager-group
