@@ -4,6 +4,7 @@ import com.ykul.flowManager.dto.ErrorResponse;
 import com.ykul.flowManager.dto.StatusResponse;
 import com.ykul.flowManager.dto.UploadResponse;
 import com.ykul.flowManager.entity.FileRecord;
+import com.ykul.flowManager.entity.FileStatus;
 import com.ykul.flowManager.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
@@ -35,7 +36,7 @@ public class FileController {
 
         return ResponseEntity.accepted().body(new UploadResponse(
                 id.toString(),
-                "IN_PROGRESS",
+                FileStatus.IN_PROGRESS.name(),
                 "Файл принят."
         ));
     }
