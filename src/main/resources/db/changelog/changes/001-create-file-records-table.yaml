@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-file-records
+      author: serj
+      changes:
+        - createTable:
+            tableName: file_records
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: file_name
+                  type: VARCHAR(255)
+              - column:
+                  name: source_path
+                  type: VARCHAR(255)
+              - column:
+                  name: converted_path
+                  type: VARCHAR(255)
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: error_message
+                  type: TEXT
