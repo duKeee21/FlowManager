@@ -1,6 +1,10 @@
 package com.ykul.flowManager.integration;
 
 
+import io.minio.BucketExistsArgs;
+import io.minio.MakeBucketArgs;
+import io.minio.MinioClient;
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -43,5 +47,18 @@ public abstract class AbstractIntegrationTest {
         registry.add("minio.access-key", minio::getUserName);
         registry.add("minio.secret-key", minio::getPassword);
         registry.add("minio.bucket-name", () -> "test-bucket");
+    }
+
+    @BeforeAll
+    static void createBucket() throws Exception {
+        try (MinioClient client = MinioClient.builder()
+                .endpoint(minio.getS3URL())
+                .credentials(minio.getUserName(), minio.getPassword())
+                .build()) {
+            boolean exists = client.bucketExists(BucketExistsArgs.builder().bucket("test-bucket").build());
+            if (!exists) {
+                client.makeBucket(MakeBucketArgs.builder().bucket("test-bucket").build());
+            }
+        }
     }
 }

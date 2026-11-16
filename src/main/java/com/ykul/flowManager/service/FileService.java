@@ -21,22 +21,22 @@ public class FileService {
     private final FileRecordRepository repository;
 
     public UUID uploadFile(MultipartFile file) throws Exception {
-        UUID id = UUID.randomUUID();
         String originalName = file.getOriginalFilename();
-        String sourcePath = "input/" + id + "/" + originalName;
-
-        minioService.uploadFile(sourcePath, file);
 
         FileRecord record = new FileRecord();
-        record.setId(id);
         record.setFileName(originalName);
-        record.setSourcePath(sourcePath);
         record.setStatus(FileStatus.IN_PROGRESS);
-        repository.save(record);
+        record = repository.save(record);
 
-        kafkaProducer.sendConversionRequest(new ConversionRequest(id.toString(), sourcePath));
+        String sourcePath = "input/" + record.getId() + "/" + originalName;
+        minioService.uploadFile(sourcePath, file);
 
-        return id;
+        record.setSourcePath(sourcePath);
+        record = repository.save(record);
+
+        kafkaProducer.sendConversionRequest(new ConversionRequest(record.getId().toString(), sourcePath));
+
+        return record.getId();
     }
 
     public FileRecord getFileRecord(UUID id) {
